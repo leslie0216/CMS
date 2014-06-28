@@ -56,17 +56,6 @@
 
 {*---------------------------------------------------------------------------*}
 
-		<div id="header">
-			<div id="logo">
-				<a href="{$weburl}"><img src="{$weburl}static/images/logo-green.gif" width="261" height="61" alt="the interaction lab" border="0"></a>
-			</div>
-			<div id="graphic">
-
-			</div>
-		</div>
-
-{*---------------------------------------------------------------------------*}
-
 		<ul id="menu">
 			{foreach from=$menu item=m}
 				<li><a href="{gl url=$m.url}" {if isset($selectedmenu) and $selectedmenu == $m.name} class="selected" {/if}>{t s={$m.name} m=0}</a></li>
@@ -75,6 +64,17 @@
 				<li style="float: right;"><a href="{gl url=$m.url}">{t s={$m.name} m=0} {if isset($m.user_id) and $m.user_id != false}({$m.user_id}){/if}</a></li>
 			{/foreach}
 		</ul>
+
+{*---------------------------------------------------------------------------*}
+
+		<div id="header">
+			<div id="logo">
+				<a href="{$weburl}">Computer Graphics Lab</a>
+			</div>
+			<div id="logo-uofs">
+				<a href="http://usask.ca"><img src="{$weburl}static/images/uofs-logo.png" width="261" height="61" alt="University of Saskatchewan" border="0"></a>
+			</div>
+		</div>
 
 {*---------------------------------------------------------------------------*}
 
