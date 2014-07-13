@@ -69,7 +69,7 @@
 
 		<div id="header">
 			<div id="logo">
-				<a href="{$weburl}">Computer Graphics Lab</a>
+				<a href="{$weburl}">{t s=website_subject m=0}</a>
 			</div>
 			<div id="logo-uofs">
 				<a href="http://usask.ca"><img src="{$weburl}static/images/uofs-logo.png" width="261" height="61" alt="University of Saskatchewan" border="0"></a>
@@ -92,7 +92,7 @@
 {*---------------------------------------------------------------------------*}
 
 	<div id="footer">
-		<div id="innerfooter">&copy; {$year} {t s=footer m=0}</div>
+		<div id="innerfooter">&copy; {$year} {t s=website_subject m=0}, University of Saskatchewan</div>
 	</div>
 
 {*---------------------------------------------------------------------------*}

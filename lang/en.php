@@ -19,7 +19,6 @@
 @define('L_SEARCH', 'Search');
 @define('L_PAGE_NOT_FOUND', 'Page Not Found');
 @define('L_NO_PAGE', 'The requested URL was not found on this server');
-@define('L_FOOTER', 'The Interaction Lab, University of Saskatchewan');
 @define('L_INTERACTION_LAB', 'Interaction Lab');
 @define('L_PEOPLE', 'People');
 @define('L_FACULTY', 'Faculty');
@@ -70,3 +69,4 @@
 @define('L_LOGIN', 'Login');
 @define('L_LOGOUT', 'Logout');
 @define('L_WEBSITE_DESCRIPTION', 'put the description of this website here.');
+@define('L_WEBSITE_SUBJECT', 'Computer Graphics Lab.');
