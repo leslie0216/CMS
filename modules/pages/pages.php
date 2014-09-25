@@ -15,22 +15,24 @@ $g['template'] = 'home';
 
 // Set main menu options
 $menu = array(
-	array('name' => 'Home',         'url' => '',             ),
-	array('name' => 'People',       'url' => 'people',       ),
-	array('name' => 'Research',     'url' => 'research',     ),
-	array('name' => 'Publications', 'url' => 'publications', ),
-	array('name' => 'Courses',      'url' => 'courses',      ),
-	array('name' => 'Download',     'url' => 'download',     ),
-	array('name' => 'Contact',      'url' => 'contact',      ),
+	array('name' => 'Researches',    'url' => 'researches',    ),
+	array('name' => 'Peoples',       'url' => 'peoples',       ),
+	array('name' => 'Opportunities', 'url' => 'opportunities', ),
+	array('name' => 'Publications',  'url' => 'publications',  ),
+	array('name' => 'Resources',     'url' => 'resources',     ),
+	array('name' => 'Home',          'url' => '',              ),
 );
+
+
 $g['smarty']->assign('menu', $menu);
 
 $auth_menu_state = $g['user']['is_authenticated'] ? 'logout' : 'login';
 
 // Set secondary menu options
 $menu = array(
-	array('name' => 'trac',           'url' => $g['trac_url'],                          ),
-	array('name' => $auth_menu_state, 'url' => $auth_menu_state, 'user_id' => $g['user']['id']),
+	array('name' => 'trac',           'url' => $g['trac_url'],),
+	array('name' => $auth_menu_state, 'url' =>
+		$auth_menu_state, 'user_id' => $g['user']['id']),
 );
 
 $g['smarty']->assign('menu_2', $menu);
@@ -53,19 +55,19 @@ case 'logout':
 
 HOME:
 case 'home': {
-	$imglist = pages::get_imagelist(true);
-	if (!$imglist['error'] && $imglist['count'] > 0)
-		$g['smarty']->assign('imglist', $imglist);
-
-	$faculty = $g['content']['people']->view('teaser', 'people.people_group = "faculty"');
+	$faculty = $g['content']['people']->view('teaser'
+		, 'people.people_group = "faculty"');
 	if (!$faculty['error'] && $faculty['count'] > 0)
 		$g['smarty']->assign('faculty', $faculty);
 
-	$research = $g['content']['research']->view('teaser', 'research.research_status = "active"', 'research.research_priority DESC', '0,3');
+	$research = $g['content']['research']->view('largeicon'
+		, 'research.research_status = "active"'
+		, 'research.research_priority DESC', '0,10');
 	if (!$research['error'] && $research['count'] > 0)
 		$g['smarty']->assign('research', $research);
 
-	$publication = $g['content']['publication']->view('teaser', '', 'publication.publication_year DESC', '0,3');
+	$publication = $g['content']['publication']->view('largeicon', ''
+		, 'publication.publication_year DESC', '0,10');
 	if (!$publication['error'] && $publication['count'] > 0)
 		$g['smarty']->assign('publication', $publication);
 
@@ -75,7 +77,8 @@ case 'home': {
 
 //-----------------------------------------------------------------------------
 
-case 'people': {
+case 'people':
+case 'peoples': {
 	if (isset($_GET['id']) && isset($_GET['details'])) {
 
 		$id = $_GET['id'];
@@ -100,17 +103,17 @@ case 'people': {
 				$ref_order[$details] = $details . '_year DESC';
 
 			$ppl = $g['content']['people']->view('default',
-				"people.people_id = $id", '', '', true, $ref_limits, $ref_order);
+				"people.people_id = $id", '', 1
+				, true, $ref_limits, $ref_order);
 
-			if (!$ppl['error'] && $ppl['count'] > 0)
+			if (!$ppl['error'] && $ppl['count'] > 0) {
 				$p = $ppl['rows'][0];
-				$g['smarty']->assign('page_l', implode(' ', array(
-					$p['people_firstname'],
-					$p['people_middlename'],
-					$p['people_lastname'])));
+				$g['smarty']->assign('page_l'
+					, $g['content']['people']->get_title($p));
 				$g['smarty']->assign('people', $p);
+			}
 
-			$g['template'] = 'snippets/people_all_' . $details;
+			$g['template'] = 'people/all_' . $details;
 		} else {
 			// error
 		}
@@ -120,117 +123,122 @@ case 'people': {
 		$ppl = $g['content']['people']->view('default',
 			"people.people_id = $id",
 			'',
-			'0,99',
+			1,
 			true,
 			array('research' => 5, 'publication' => 5));
 
-		if (!$ppl['error'] && $ppl['count'] > 0)
+		if (!$ppl['error'] && $ppl['count'] > 0) {
 			$p = $ppl['rows'][0];
-			$g['smarty']->assign('page_l', implode(' ', array($p['people_firstname'], $p['people_middlename'], $p['people_lastname'])));
+			$g['smarty']->assign('page_l'
+				, $g['content']['people']->get_title($p));
 			$g['smarty']->assign('people', $p);
-
-		$g['template'] = 'snippets/people_default';
+			$g['template'] = 'people/display_default';
+		}
 	} else {
 		$g['smarty']->assign('page', 'People');
 		$g['smarty']->assign('selectedmenu', 'People');
-		$ppl = $g['content']['people']->view('teaser', '', 'people.people_group, people.people_firstname ASC', '');
+		$ppl = $g['content']['people']->view('teaser', ''
+			, 'people.people_group, people.people_firstname ASC', '');
 
 		if (!$ppl['error'] && $ppl['count'] > 0)
 			$g['smarty']->assign('people', $ppl);
 
-		$g['template'] = 'people';
+		$g['template'] = 'peoples';
 	}
 } break;
 
 //-----------------------------------------------------------------------------
 
-case 'research': {
+case 'pages':
+case 'courses':
+case 'researches':
+case 'publications':
+case 'opportunities':
+case 'resources':
+{
+	$page = isset($_GET['id']) ? $_GET['id'] : 1;
+	$ct = '';
+	$priority = '';
+	$display = 'teaser';
+
+	switch ($_GET['action']) {
+	case 'courses':
+		$ct = 'course';
+		$priority = "$ct.{$ct}_priority DESC";
+		break;
+	case 'researches':
+		$ct = 'research';
+		$priority = "$ct.{$ct}_priority DESC";
+		$display = 'largeicon';
+		break;
+	case 'publications':
+		$ct = 'publication';
+		$priority = "$ct.{$ct}_year DESC";
+		$display = 'largeicon';
+		break;
+	case 'opportunities':
+		$ct = 'opportunity';
+		$priority = "$ct.{$ct}_priority DESC";
+		break;
+	case 'resources':
+		$ct = 'resource';
+		$priority = "$ct.{$ct}_priority DESC";
+		break;
+	}
+
+	$menu_item = '';
+	foreach ($menu as $v)
+		if ($v['url'] == $ct) {
+			$menu_item = $v['name'];
+			break;
+		}
+
+	$g['smarty']->assign('page', $_GET['action']);
+	if ('' != $menu_item)
+		$g['smarty']->assign('selectedmenu', $menu_item);
+
+	$res = $g['content'][$ct]->view($display, '', $priority, $page);
+
+	if (!$res['error'] && $res['count'] > 0) {
+		$g['smarty']->assign($_GET['action'], $res);
+	}
+
+	$g['template'] = $_GET['action'];
+} break;
+
+//-----------------------------------------------------------------------------
+
+case 'course':
+case 'page':
+case 'research':
+case 'resource':
+case 'opportunity':
+case 'publication':
+{
 	if (isset($_GET['id'])) {
 		$id = $_GET['id'];
-		$g['smarty']->assign('selectedmenu', 'Research');
-		$r = $g['content']['research']->view('default', "research.research_id = $id");
+		$ct = $_GET['action'];
 
+		$menu_item = '';
+		foreach ($menu as $v)
+			if ($v['url'] == $ct) {
+				$menu_item = $v['name'];
+				break;
+			}
+
+		if ('' != $menu_item)
+			$g['smarty']->assign('selectedmenu', $menu_item);
+
+		$r = $g['content'][$ct]->view('default', "$ct.{$ct}_id = $id");
+
+		$g['smarty']->assign('page', $ct);
 		if (!$r['error'] && $r['count'] > 0)
 			$p = $r['rows'][0];
-			$g['smarty']->assign('page_l', $p['research_title']);
-			$g['smarty']->assign('research', $p);
+			$g['smarty']->assign('page_l', $g['content'][$ct]->get_title($p));
+			$g['smarty']->assign($ct, $p);
 
-		$g['template'] = 'snippets/research_default';
-	} else {
-		$g['smarty']->assign('page', 'Research');
-		$g['smarty']->assign('selectedmenu', 'Research');
-		$research = $g['content']['research']->view('teaser', '', 'research.research_priority ASC, research.research_status');
-
-		if (!$research['error'] && $research['count'] > 0)
-			$g['smarty']->assign('research', $research);
-
-		$g['template'] = 'research';
+		$g['template'] = "{$ct}/display_default";
 	}
-} break;
-
-//-----------------------------------------------------------------------------
-
-case 'publication': {
-	if (isset($_GET['id'])) {
-		$id = $_GET['id'];
-		$g['smarty']->assign('selectedmenu', 'Publications');
-		$r = $g['content']['publication']->view('default', "publication.publication_id = $id");
-
-		if (!$r['error'] && $r['count'] > 0)
-			$p = $r['rows'][0];
-			$g['smarty']->assign('page_l', $p['publication_title']);
-			$g['smarty']->assign('publication', $p);
-
-		$g['template'] = 'snippets/publication_default';
-	}
-} break;
-
-//-----------------------------------------------------------------------------
-
-case 'publications': {
-	$g['smarty']->assign('selectedmenu', 'Publications');
-	$g['smarty']->assign('page', 'Publications');
-
-	if (isset($_GET['id'])) {
-		$page = $_GET['id'];
-	} else {
-		$page = 1;
-	}
-
-	$pg_max = 100;
-	$pg_s = ($page - 1) * $pg_max;
-
-	$pubs = $g['content']['publication']->view('teaser', '', 'publication.publication_year DESC', "$pg_s,$pg_max");
-
-	if (!$pubs['error'] && $pubs['count'] > 0) {
-		$g['smarty']->assign('publications', $pubs);
-	}
-
-	$g['template'] = 'publication';
-} break;
-
-//-----------------------------------------------------------------------------
-
-case 'courses': {
-	$g['smarty']->assign('page', 'Courses');
-	$g['smarty']->assign('selectedmenu', 'Courses');
-	$g['template'] = 'courses';
-} break;
-
-//-----------------------------------------------------------------------------
-
-case 'download': {
-	$g['smarty']->assign('page', 'Download');
-	$g['smarty']->assign('selectedmenu', 'Download');
-	$g['template'] = 'download';
-} break;
-
-//-----------------------------------------------------------------------------
-
-case 'contact': {
-	$g['smarty']->assign('page', 'Contact');
-	$g['smarty']->assign('selectedmenu', 'Contact');
-	$g['template'] = 'contact';
 } break;
 
 //-----------------------------------------------------------------------------

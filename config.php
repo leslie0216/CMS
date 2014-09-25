@@ -10,7 +10,7 @@ if (!file_exists('config.ini')) {
     die('<b>Error</b>: <b>config.ini</b> not found!');
 }
 
-$config = parse_ini_file('config.ini',TRUE);
+$config = parse_ini_file('config.ini', TRUE);
 
 if ($config['PHP']['use_session']) {
     session_set_cookie_params(0, dirname($_SERVER['PHP_SELF']));
@@ -49,7 +49,9 @@ $g['auth_method']             = $config['GLOBAL']['auth_method'];
 $g['trac_url']                = $config['GLOBAL']['trac_url'];
 
 $g['fullpath']                = dirname(__FILE__) . '/';
-$g['weburl']                  = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/';
+$g['weburl']                  = 'http://'
+    . $_SERVER['HTTP_HOST']
+    . dirname($_SERVER['PHP_SELF']) . '/';
 $g['content']                 = array ();
 $g['default_page_to_display'] = "templates/index.tpl";
 $g['lang']                    = $g['default_lang'];
@@ -76,7 +78,8 @@ switch ($g['auth_method']) {
     case 'cas':
         $g['cas'] = $config['CAS'];
         $g['cas']['cas_server_port']     = (int)($g['cas']['cas_server_port']);
-        $g['cas']['cas_server_version']  = CAS_VERSION_1_0; //TODO: $g['cas']['cas_server_version'];
+        //TODO: $g['cas']['cas_server_version'];
+        $g['cas']['cas_server_version']  = CAS_VERSION_1_0;
         break;
 
     default:
@@ -92,8 +95,7 @@ $g['urls'] = array (
 
 // remove slashes when magic_quotes_gpc is on
 if (get_magic_quotes_gpc()) {
-    function stripslashes_gpc(&$value)
-    {
+    function stripslashes_gpc(&$value) {
         $value = stripslashes($value);
     }
     array_walk_recursive($_GET, 'stripslashes_gpc');
@@ -127,7 +129,8 @@ if (!$g['user']['is_authenticated']) {
     if ($g['auth']->is_authenticated()) {
         $g['user']['is_authenticated'] = true;
         $g['user']['id'] = $g['auth']->get_user_id();
-        $g['user']['is_admin'] = $g['auth']->is_admin($g['session']['user']['id']);
+        $g['user']['is_admin'] = $g['auth']->is_admin(
+            $g['session']['user']['id']);
     }
 }
 

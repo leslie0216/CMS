@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `mycms`
+-- Database: `graphics`
 --
 
 -- --------------------------------------------------------
@@ -25,41 +25,41 @@ SET time_zone = "+00:00";
 -- Drop all tables
 
 DROP VIEW IF EXISTS
-  `mycms_publication_video`,
-  `mycms_research_video`,
-  `mycms_people_image`,
-  `mycms_publication_doc`,
-  `mycms_publication_image`,
-  `mycms_publication_people`,
-  `mycms_research_image`,
-  `mycms_research_people`,
-  `mycms_research_publication`;
+  `graphics_publication_video`,
+  `graphics_research_video`,
+  `graphics_people_image`,
+  `graphics_publication_doc`,
+  `graphics_publication_image`,
+  `graphics_publication_people`,
+  `graphics_research_image`,
+  `graphics_research_people`,
+  `graphics_research_publication`;
 
 DROP TABLE IF EXISTS
-  `mycms_video_publication`,
-  `mycms_video_research`,
-  `mycms_image_people`,
-  `mycms_doc_publication`,
-  `mycms_image_publication`,
-  `mycms_people_publication`,
-  `mycms_image_research`,
-  `mycms_people_research`,
-  `mycms_publication_research`,
-  `mycms_settings`,
-  `mycms_doc`,
-  `mycms_image`,
-  `mycms_video`,
-  `mycms_people`,
-  `mycms_publication`,
-  `mycms_research`;
+  `graphics_video_publication`,
+  `graphics_video_research`,
+  `graphics_image_people`,
+  `graphics_doc_publication`,
+  `graphics_image_publication`,
+  `graphics_people_publication`,
+  `graphics_image_research`,
+  `graphics_people_research`,
+  `graphics_publication_research`,
+  `graphics_settings`,
+  `graphics_doc`,
+  `graphics_image`,
+  `graphics_video`,
+  `graphics_people`,
+  `graphics_publication`,
+  `graphics_research`;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mycms_settings`
+-- Table structure for table `graphics_settings`
 --
 
-CREATE TABLE IF NOT EXISTS `mycms_settings` (
+CREATE TABLE IF NOT EXISTS `graphics_settings` (
   `var` varchar(150) COLLATE utf8_unicode_ci NOT NULL,
   `val` varchar(150) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -67,10 +67,10 @@ CREATE TABLE IF NOT EXISTS `mycms_settings` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mycms_doc`
+-- Table structure for table `graphics_doc`
 --
 
-CREATE TABLE IF NOT EXISTS `mycms_doc` (
+CREATE TABLE IF NOT EXISTS `graphics_doc` (
   `doc_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `doc_filename` varchar(250) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`doc_id`),
@@ -80,10 +80,10 @@ CREATE TABLE IF NOT EXISTS `mycms_doc` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mycms_image`
+-- Table structure for table `graphics_image`
 --
 
-CREATE TABLE IF NOT EXISTS `mycms_image` (
+CREATE TABLE IF NOT EXISTS `graphics_image` (
   `image_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `image_filename` varchar(250) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`image_id`),
@@ -93,10 +93,10 @@ CREATE TABLE IF NOT EXISTS `mycms_image` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mycms_video`
+-- Table structure for table `graphics_video`
 --
 
-CREATE TABLE IF NOT EXISTS `mycms_video` (
+CREATE TABLE IF NOT EXISTS `graphics_video` (
   `video_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `video_filename` varchar(250) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`video_id`),
@@ -106,10 +106,10 @@ CREATE TABLE IF NOT EXISTS `mycms_video` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mycms_people`
+-- Table structure for table `graphics_people`
 --
 
-CREATE TABLE IF NOT EXISTS `mycms_people` (
+CREATE TABLE IF NOT EXISTS `graphics_people` (
   `people_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `people_firstname` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `people_middlename` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -129,10 +129,10 @@ CREATE TABLE IF NOT EXISTS `mycms_people` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mycms_publication`
+-- Table structure for table `graphics_publication`
 --
 
-CREATE TABLE IF NOT EXISTS `mycms_publication` (
+CREATE TABLE IF NOT EXISTS `graphics_publication` (
   `publication_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `publication_type` enum('article','book','booklet','conference','inbook','incollection','inproceedings','manual','mastersthesis','misc','phdthesis','proceedings','techreport','unpublished') COLLATE utf8_unicode_ci NOT NULL,
   `publication_title` varchar(300) COLLATE utf8_unicode_ci NOT NULL,
@@ -166,10 +166,10 @@ CREATE TABLE IF NOT EXISTS `mycms_publication` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mycms_research`
+-- Table structure for table `graphics_research`
 --
 
-CREATE TABLE IF NOT EXISTS `mycms_research` (
+CREATE TABLE IF NOT EXISTS `graphics_research` (
   `research_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `research_title` varchar(150) COLLATE utf8_unicode_ci NOT NULL,
   `research_summary` varchar(1000) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -183,10 +183,43 @@ CREATE TABLE IF NOT EXISTS `mycms_research` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mycms_video_publication`
+-- Table structure for table `graphics_opportunity`
 --
 
-CREATE TABLE IF NOT EXISTS `mycms_video_publication` (
+CREATE TABLE IF NOT EXISTS `graphics_opportunity` (
+  `opportunity_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `opportunity_title` varchar(150) COLLATE utf8_unicode_ci NOT NULL,
+  `opportunity_summary` varchar(1000) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `opportunity_description` varchar(10000) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `opportunity_status` enum('active','future','onhold','past','unknown') COLLATE utf8_unicode_ci NOT NULL,
+  `opportunity_priority` int(10) DEFAULT NULL,
+  PRIMARY KEY (`opportunity_id`),
+  UNIQUE KEY `opportunity_id` (`opportunity_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `graphics_resource`
+--
+
+CREATE TABLE IF NOT EXISTS `graphics_resource` (
+  `resource_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `resource_title` varchar(150) COLLATE utf8_unicode_ci NOT NULL,
+  `resource_summary` varchar(1000) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `resource_description` varchar(10000) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `resource_priority` int(10) DEFAULT NULL,
+  PRIMARY KEY (`resource_id`),
+  UNIQUE KEY `resource_id` (`resource_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `graphics_video_publication`
+--
+
+CREATE TABLE IF NOT EXISTS `graphics_video_publication` (
   `video_id` int(11) UNSIGNED NOT NULL,
   `publication_id` int(11) UNSIGNED NOT NULL,
   `video_order` int(11) DEFAULT NULL,
@@ -196,30 +229,30 @@ CREATE TABLE IF NOT EXISTS `mycms_video_publication` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Constraints for table `mycms_video_publication`
+-- Constraints for table `graphics_video_publication`
 --
-ALTER TABLE `mycms_video_publication`
-  ADD CONSTRAINT `mycms_video_publication_ibfk_1` FOREIGN KEY (`video_id`) REFERENCES `mycms_video` (`video_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `mycms_video_publication_ibfk_2` FOREIGN KEY (`publication_id`) REFERENCES `mycms_publication` (`publication_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `graphics_video_publication`
+  ADD CONSTRAINT `graphics_video_publication_ibfk_1` FOREIGN KEY (`video_id`) REFERENCES `graphics_video` (`video_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `graphics_video_publication_ibfk_2` FOREIGN KEY (`publication_id`) REFERENCES `graphics_publication` (`publication_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Structure for view `mycms_publication_video`
+-- Structure for view `graphics_publication_video`
 --
-DROP TABLE IF EXISTS `mycms_publication_video`;
-CREATE VIEW `mycms_publication_video` AS (select
-  `mycms_video_publication`.`video_id` AS `video_id`,
-  `mycms_video_publication`.`publication_id` AS `publication_id`,
-  `mycms_video_publication`.`video_order` AS `video_order`,
-  `mycms_video_publication`.`publication_order` AS `publication_order`
-  from `mycms_video_publication`);
+DROP TABLE IF EXISTS `graphics_publication_video`;
+CREATE VIEW `graphics_publication_video` AS (select
+  `graphics_video_publication`.`video_id` AS `video_id`,
+  `graphics_video_publication`.`publication_id` AS `publication_id`,
+  `graphics_video_publication`.`video_order` AS `video_order`,
+  `graphics_video_publication`.`publication_order` AS `publication_order`
+  from `graphics_video_publication`);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mycms_video_research`
+-- Table structure for table `graphics_video_research`
 --
 
-CREATE TABLE IF NOT EXISTS `mycms_video_research` (
+CREATE TABLE IF NOT EXISTS `graphics_video_research` (
   `video_id` int(11) UNSIGNED NOT NULL,
   `research_id` int(11) UNSIGNED NOT NULL,
   `video_order` int(11) DEFAULT NULL,
@@ -229,30 +262,30 @@ CREATE TABLE IF NOT EXISTS `mycms_video_research` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Constraints for table `mycms_video_research`
+-- Constraints for table `graphics_video_research`
 --
-ALTER TABLE `mycms_video_research`
-  ADD CONSTRAINT `mycms_video_research_ibfk_1` FOREIGN KEY (`video_id`) REFERENCES `mycms_video` (`video_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `mycms_video_research_ibfk_2` FOREIGN KEY (`research_id`) REFERENCES `mycms_research` (`research_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `graphics_video_research`
+  ADD CONSTRAINT `graphics_video_research_ibfk_1` FOREIGN KEY (`video_id`) REFERENCES `graphics_video` (`video_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `graphics_video_research_ibfk_2` FOREIGN KEY (`research_id`) REFERENCES `graphics_research` (`research_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Structure for view `mycms_research_video`
+-- Structure for view `graphics_research_video`
 --
-DROP TABLE IF EXISTS `mycms_research_video`;
-CREATE VIEW `mycms_research_video` AS (select
-  `mycms_video_research`.`video_id` AS `video_id`,
-  `mycms_video_research`.`research_id` AS `research_id`,
-  `mycms_video_research`.`video_order` AS `video_order`,
-  `mycms_video_research`.`research_order` AS `research_order`
-  from `mycms_video_research`);
+DROP TABLE IF EXISTS `graphics_research_video`;
+CREATE VIEW `graphics_research_video` AS (select
+  `graphics_video_research`.`video_id` AS `video_id`,
+  `graphics_video_research`.`research_id` AS `research_id`,
+  `graphics_video_research`.`video_order` AS `video_order`,
+  `graphics_video_research`.`research_order` AS `research_order`
+  from `graphics_video_research`);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mycms_image_people`
+-- Table structure for table `graphics_image_people`
 --
 
-CREATE TABLE IF NOT EXISTS `mycms_image_people` (
+CREATE TABLE IF NOT EXISTS `graphics_image_people` (
   `image_id` int(11) UNSIGNED NOT NULL,
   `people_id` int(11) UNSIGNED NOT NULL,
   `image_order` int(11) DEFAULT NULL,
@@ -262,30 +295,30 @@ CREATE TABLE IF NOT EXISTS `mycms_image_people` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Constraints for table `mycms_image_people`
+-- Constraints for table `graphics_image_people`
 --
-ALTER TABLE `mycms_image_people`
-  ADD CONSTRAINT `mycms_image_people_ibfk_1` FOREIGN KEY (`image_id`) REFERENCES `mycms_image` (`image_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `mycms_image_people_ibfk_2` FOREIGN KEY (`people_id`) REFERENCES `mycms_people` (`people_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `graphics_image_people`
+  ADD CONSTRAINT `graphics_image_people_ibfk_1` FOREIGN KEY (`image_id`) REFERENCES `graphics_image` (`image_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `graphics_image_people_ibfk_2` FOREIGN KEY (`people_id`) REFERENCES `graphics_people` (`people_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Structure for view `mycms_people_image`
+-- Structure for view `graphics_people_image`
 --
-DROP TABLE IF EXISTS `mycms_people_image`;
-CREATE VIEW `mycms_people_image` AS (select
-  `mycms_image_people`.`image_id` AS `image_id`,
-  `mycms_image_people`.`people_id` AS `people_id`,
-  `mycms_image_people`.`image_order` AS `image_order`,
-  `mycms_image_people`.`people_order` AS `people_order`
-  from `mycms_image_people`);
+DROP TABLE IF EXISTS `graphics_people_image`;
+CREATE VIEW `graphics_people_image` AS (select
+  `graphics_image_people`.`image_id` AS `image_id`,
+  `graphics_image_people`.`people_id` AS `people_id`,
+  `graphics_image_people`.`image_order` AS `image_order`,
+  `graphics_image_people`.`people_order` AS `people_order`
+  from `graphics_image_people`);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mycms_doc_publication`
+-- Table structure for table `graphics_doc_publication`
 --
 
-CREATE TABLE IF NOT EXISTS `mycms_doc_publication` (
+CREATE TABLE IF NOT EXISTS `graphics_doc_publication` (
   `doc_id` int(11) UNSIGNED NOT NULL,
   `publication_id` int(11) UNSIGNED NOT NULL,
   `doc_order` int(11) DEFAULT NULL,
@@ -295,30 +328,30 @@ CREATE TABLE IF NOT EXISTS `mycms_doc_publication` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Constraints for table `mycms_doc_publication`
+-- Constraints for table `graphics_doc_publication`
 --
-ALTER TABLE `mycms_doc_publication`
-  ADD CONSTRAINT `mycms_doc_publication_ibfk_1` FOREIGN KEY (`doc_id`) REFERENCES `mycms_doc` (`doc_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `mycms_doc_publication_ibfk_2` FOREIGN KEY (`publication_id`) REFERENCES `mycms_publication` (`publication_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `graphics_doc_publication`
+  ADD CONSTRAINT `graphics_doc_publication_ibfk_1` FOREIGN KEY (`doc_id`) REFERENCES `graphics_doc` (`doc_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `graphics_doc_publication_ibfk_2` FOREIGN KEY (`publication_id`) REFERENCES `graphics_publication` (`publication_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Structure for view `mycms_publication_doc`
+-- Structure for view `graphics_publication_doc`
 --
-DROP TABLE IF EXISTS `mycms_publication_doc`;
-CREATE VIEW `mycms_publication_doc` AS (select
-  `mycms_doc_publication`.`doc_id` AS `doc_id`,
-  `mycms_doc_publication`.`publication_id` AS `publication_id`,
-  `mycms_doc_publication`.`doc_order` AS `doc_order`,
-  `mycms_doc_publication`.`publication_order` AS `publication_order`
-  from `mycms_doc_publication`);
+DROP TABLE IF EXISTS `graphics_publication_doc`;
+CREATE VIEW `graphics_publication_doc` AS (select
+  `graphics_doc_publication`.`doc_id` AS `doc_id`,
+  `graphics_doc_publication`.`publication_id` AS `publication_id`,
+  `graphics_doc_publication`.`doc_order` AS `doc_order`,
+  `graphics_doc_publication`.`publication_order` AS `publication_order`
+  from `graphics_doc_publication`);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mycms_image_publication`
+-- Table structure for table `graphics_image_publication`
 --
 
-CREATE TABLE IF NOT EXISTS `mycms_image_publication` (
+CREATE TABLE IF NOT EXISTS `graphics_image_publication` (
   `image_id` int(11) UNSIGNED NOT NULL,
   `publication_id` int(11) UNSIGNED NOT NULL,
   `image_order` int(11) DEFAULT NULL,
@@ -328,30 +361,30 @@ CREATE TABLE IF NOT EXISTS `mycms_image_publication` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Constraints for table `mycms_image_publication`
+-- Constraints for table `graphics_image_publication`
 --
-ALTER TABLE `mycms_image_publication`
-  ADD CONSTRAINT `mycms_image_publication_ibfk_1` FOREIGN KEY (`image_id`) REFERENCES `mycms_image` (`image_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `mycms_image_publication_ibfk_2` FOREIGN KEY (`publication_id`) REFERENCES `mycms_publication` (`publication_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `graphics_image_publication`
+  ADD CONSTRAINT `graphics_image_publication_ibfk_1` FOREIGN KEY (`image_id`) REFERENCES `graphics_image` (`image_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `graphics_image_publication_ibfk_2` FOREIGN KEY (`publication_id`) REFERENCES `graphics_publication` (`publication_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Structure for view `mycms_publication_image`
+-- Structure for view `graphics_publication_image`
 --
-DROP TABLE IF EXISTS `mycms_publication_image`;
-CREATE VIEW `mycms_publication_image` AS (select
-  `mycms_image_publication`.`image_id` AS `image_id`,
-  `mycms_image_publication`.`publication_id` AS `publication_id`,
-  `mycms_image_publication`.`image_order` AS `image_order`,
-  `mycms_image_publication`.`publication_order` AS `publication_order`
-  from `mycms_image_publication`);
+DROP TABLE IF EXISTS `graphics_publication_image`;
+CREATE VIEW `graphics_publication_image` AS (select
+  `graphics_image_publication`.`image_id` AS `image_id`,
+  `graphics_image_publication`.`publication_id` AS `publication_id`,
+  `graphics_image_publication`.`image_order` AS `image_order`,
+  `graphics_image_publication`.`publication_order` AS `publication_order`
+  from `graphics_image_publication`);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mycms_people_publication`
+-- Table structure for table `graphics_people_publication`
 --
 
-CREATE TABLE IF NOT EXISTS `mycms_people_publication` (
+CREATE TABLE IF NOT EXISTS `graphics_people_publication` (
   `people_id` int(11) UNSIGNED NOT NULL,
   `publication_id` int(11) UNSIGNED NOT NULL,
   `people_order` int(11) DEFAULT NULL,
@@ -361,30 +394,30 @@ CREATE TABLE IF NOT EXISTS `mycms_people_publication` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Constraints for table `mycms_people_publication`
+-- Constraints for table `graphics_people_publication`
 --
-ALTER TABLE `mycms_people_publication`
-  ADD CONSTRAINT `mycms_people_publication_ibfk_1` FOREIGN KEY (`people_id`) REFERENCES `mycms_people` (`people_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `mycms_people_publication_ibfk_2` FOREIGN KEY (`publication_id`) REFERENCES `mycms_publication` (`publication_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `graphics_people_publication`
+  ADD CONSTRAINT `graphics_people_publication_ibfk_1` FOREIGN KEY (`people_id`) REFERENCES `graphics_people` (`people_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `graphics_people_publication_ibfk_2` FOREIGN KEY (`publication_id`) REFERENCES `graphics_publication` (`publication_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Structure for view `mycms_publication_people`
+-- Structure for view `graphics_publication_people`
 --
-DROP TABLE IF EXISTS `mycms_publication_people`;
-CREATE VIEW `mycms_publication_people` AS (select
-  `mycms_people_publication`.`people_id` AS `people_id`,
-  `mycms_people_publication`.`publication_id` AS `publication_id`,
-  `mycms_people_publication`.`people_order` AS `people_order`,
-  `mycms_people_publication`.`publication_order` AS `publication_order`
-  from `mycms_people_publication`);
+DROP TABLE IF EXISTS `graphics_publication_people`;
+CREATE VIEW `graphics_publication_people` AS (select
+  `graphics_people_publication`.`people_id` AS `people_id`,
+  `graphics_people_publication`.`publication_id` AS `publication_id`,
+  `graphics_people_publication`.`people_order` AS `people_order`,
+  `graphics_people_publication`.`publication_order` AS `publication_order`
+  from `graphics_people_publication`);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mycms_image_research`
+-- Table structure for table `graphics_image_research`
 --
 
-CREATE TABLE IF NOT EXISTS `mycms_image_research` (
+CREATE TABLE IF NOT EXISTS `graphics_image_research` (
   `image_id` int(11) UNSIGNED NOT NULL,
   `research_id` int(11) UNSIGNED NOT NULL,
   `image_order` int(11) DEFAULT NULL,
@@ -394,30 +427,30 @@ CREATE TABLE IF NOT EXISTS `mycms_image_research` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Constraints for table `mycms_image_research`
+-- Constraints for table `graphics_image_research`
 --
-ALTER TABLE `mycms_image_research`
-  ADD CONSTRAINT `mycms_image_research_ibfk_1` FOREIGN KEY (`image_id`) REFERENCES `mycms_image` (`image_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `mycms_image_research_ibfk_2` FOREIGN KEY (`research_id`) REFERENCES `mycms_research` (`research_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `graphics_image_research`
+  ADD CONSTRAINT `graphics_image_research_ibfk_1` FOREIGN KEY (`image_id`) REFERENCES `graphics_image` (`image_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `graphics_image_research_ibfk_2` FOREIGN KEY (`research_id`) REFERENCES `graphics_research` (`research_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Structure for view `mycms_research_image`
+-- Structure for view `graphics_research_image`
 --
-DROP TABLE IF EXISTS `mycms_research_image`;
-CREATE VIEW `mycms_research_image` AS (select
-  `mycms_image_research`.`image_id` AS `image_id`,
-  `mycms_image_research`.`research_id` AS `research_id`,
-  `mycms_image_research`.`image_order` AS `image_order`,
-  `mycms_image_research`.`research_order` AS `research_order`
-  from `mycms_image_research`);
+DROP TABLE IF EXISTS `graphics_research_image`;
+CREATE VIEW `graphics_research_image` AS (select
+  `graphics_image_research`.`image_id` AS `image_id`,
+  `graphics_image_research`.`research_id` AS `research_id`,
+  `graphics_image_research`.`image_order` AS `image_order`,
+  `graphics_image_research`.`research_order` AS `research_order`
+  from `graphics_image_research`);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mycms_people_research`
+-- Table structure for table `graphics_people_research`
 --
 
-CREATE TABLE IF NOT EXISTS `mycms_people_research` (
+CREATE TABLE IF NOT EXISTS `graphics_people_research` (
   `people_id` int(11) UNSIGNED NOT NULL,
   `research_id` int(11) UNSIGNED NOT NULL,
   `people_order` int(11) DEFAULT NULL,
@@ -427,30 +460,30 @@ CREATE TABLE IF NOT EXISTS `mycms_people_research` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Constraints for table `mycms_people_research`
+-- Constraints for table `graphics_people_research`
 --
-ALTER TABLE `mycms_people_research`
-  ADD CONSTRAINT `mycms_people_research_ibfk_1` FOREIGN KEY (`people_id`) REFERENCES `mycms_people` (`people_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `mycms_people_research_ibfk_2` FOREIGN KEY (`research_id`) REFERENCES `mycms_research` (`research_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `graphics_people_research`
+  ADD CONSTRAINT `graphics_people_research_ibfk_1` FOREIGN KEY (`people_id`) REFERENCES `graphics_people` (`people_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `graphics_people_research_ibfk_2` FOREIGN KEY (`research_id`) REFERENCES `graphics_research` (`research_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Structure for view `mycms_research_people`
+-- Structure for view `graphics_research_people`
 --
-DROP TABLE IF EXISTS `mycms_research_people`;
-CREATE VIEW `mycms_research_people` AS (select
-  `mycms_people_research`.`people_id` AS `people_id`,
-  `mycms_people_research`.`research_id` AS `research_id`,
-  `mycms_people_research`.`people_order` AS `people_order`,
-  `mycms_people_research`.`research_order` AS `research_order`
-  from `mycms_people_research`);
+DROP TABLE IF EXISTS `graphics_research_people`;
+CREATE VIEW `graphics_research_people` AS (select
+  `graphics_people_research`.`people_id` AS `people_id`,
+  `graphics_people_research`.`research_id` AS `research_id`,
+  `graphics_people_research`.`people_order` AS `people_order`,
+  `graphics_people_research`.`research_order` AS `research_order`
+  from `graphics_people_research`);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mycms_publication_research`
+-- Table structure for table `graphics_publication_research`
 --
 
-CREATE TABLE IF NOT EXISTS `mycms_publication_research` (
+CREATE TABLE IF NOT EXISTS `graphics_publication_research` (
   `publication_id` int(11) UNSIGNED NOT NULL,
   `research_id` int(11) UNSIGNED NOT NULL,
   `publication_order` int(11) DEFAULT NULL,
@@ -460,22 +493,22 @@ CREATE TABLE IF NOT EXISTS `mycms_publication_research` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Constraints for table `mycms_publication_research`
+-- Constraints for table `graphics_publication_research`
 --
-ALTER TABLE `mycms_publication_research`
-  ADD CONSTRAINT `mycms_publication_research_ibfk_1` FOREIGN KEY (`publication_id`) REFERENCES `mycms_publication` (`publication_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `mycms_publication_research_ibfk_2` FOREIGN KEY (`research_id`) REFERENCES `mycms_research` (`research_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `graphics_publication_research`
+  ADD CONSTRAINT `graphics_publication_research_ibfk_1` FOREIGN KEY (`publication_id`) REFERENCES `graphics_publication` (`publication_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `graphics_publication_research_ibfk_2` FOREIGN KEY (`research_id`) REFERENCES `graphics_research` (`research_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Structure for view `mycms_research_publication`
+-- Structure for view `graphics_research_publication`
 --
-DROP TABLE IF EXISTS `mycms_research_publication`;
-CREATE VIEW `mycms_research_publication` AS (select
-  `mycms_publication_research`.`publication_id` AS `publication_id`,
-  `mycms_publication_research`.`research_id` AS `research_id`,
-  `mycms_publication_research`.`publication_order` AS `publication_order`,
-  `mycms_publication_research`.`research_order` AS `research_order`
-  from `mycms_publication_research`);
+DROP TABLE IF EXISTS `graphics_research_publication`;
+CREATE VIEW `graphics_research_publication` AS (select
+  `graphics_publication_research`.`publication_id` AS `publication_id`,
+  `graphics_publication_research`.`research_id` AS `research_id`,
+  `graphics_publication_research`.`publication_order` AS `publication_order`,
+  `graphics_publication_research`.`research_order` AS `research_order`
+  from `graphics_publication_research`);
 
 -- --------------------------------------------------------
 

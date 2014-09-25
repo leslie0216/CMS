@@ -17,7 +17,11 @@ abstract class content extends \DB_DataObject {
 //-----------------------------------------------------------------------------
 
 	public function __construct($type) {
+		global $g;
+		$dbn = $g['DB_DataObject']['db_name'];
+
 		$this->m_type = $type;
+		$this->__table = $dbn . '_' . array_pop(explode('\\', get_class($this)));
 	}
 
 //-----------------------------------------------------------------------------
@@ -28,6 +32,22 @@ abstract class content extends \DB_DataObject {
 //-----------------------------------------------------------------------------
 
 	public function edit() {
+	}
+
+//-----------------------------------------------------------------------------
+
+	public function get_title($vals) {
+		$res = '';
+		$fields = explode(' ', $this->title_format);
+
+		foreach ($fields as $f) {
+			if ('' === $res)
+				$res .= $vals[$f];
+			else
+				$res .= ' ' . $vals[$f];
+		}
+
+		return $res;
 	}
 
 //-----------------------------------------------------------------------------
@@ -53,7 +73,7 @@ abstract class content extends \DB_DataObject {
 	public function getall() {
 		global $g;
 
-	    $data_obj = \DB_DataObject::Factory('mycms\\' . $this->m_type);
+	    $data_obj = \DB_DataObject::Factory($g['db']->name . '\\' . $this->m_type);
 
 	    if ($data_obj instanceof \DB_DataObject_Error) {
 	    	$g['error']->push($data_obj->message);
@@ -77,12 +97,14 @@ abstract class content extends \DB_DataObject {
     	$display             = 'teaser',
     	$where               = '',
     	$sortby              = '',
-    	$limit               = '0,99',
+    	$page               = 1,
     	$get_referenced_data = true,
     	$refrence_limit      = array(),
     	$refrence_order      = array()) {
 
         global $g;
+        $PAGE_SIZE = 100;
+
 
 		if (!array_key_exists($display, $this->displays)) {
 			$r = array('error' => true, 'count' => 0, 'rows' => array());
@@ -147,8 +169,14 @@ abstract class content extends \DB_DataObject {
 		if (!empty($sortby))
 			$q = "$q ORDER BY $sortby";
 
-		if (!empty($limit))
-			$q = "$q LIMIT $limit";
+		if (!empty($page)) {
+			if (strpos($page, ',') !== FALSE)
+				$q = "$q LIMIT $page";
+			else {
+				$from = ($page - 1) * $PAGE_SIZE;
+				$q = "$q LIMIT $from,$PAGE_SIZE";
+			}
+		}
 
 		$r = $g['db']->query($q);
 

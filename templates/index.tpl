@@ -56,20 +56,23 @@
 
 {*---------------------------------------------------------------------------*}
 
-		<ul id="menu">
-			{foreach from=$menu item=m}
-				<li><a href="{gl url=$m.url}" {if isset($selectedmenu) and $selectedmenu == $m.name} class="selected" {/if}>{t s={$m.name} m=0}</a></li>
-			{/foreach}
-			{foreach from=$menu_2 item=m}
-				<li style="float: right;"><a href="{gl url=$m.url}">{t s={$m.name} m=0} {if isset($m.user_id) and $m.user_id != false}({$m.user_id}){/if}</a></li>
-			{/foreach}
-		</ul>
 
 {*---------------------------------------------------------------------------*}
 
 		<div id="header">
+			<ul id="menu">
+				{foreach from=$menu item=m}
+					<li><a href="{gl url=$m.url}" {if isset($selectedmenu) and $selectedmenu == $m.name} class="selected" {/if}>{t s={$m.name} m=0}</a></li>
+				{/foreach}
+				{foreach from=$menu_2 item=m}
+					<li style="float: right;"><a href="{gl url=$m.url}">{t s={$m.name} m=0} {if isset($m.user_id) and $m.user_id != false}({$m.user_id}){/if}</a></li>
+				{/foreach}
+			</ul>
 			<div id="logo">
-				<a href="{$weburl}">{t s=website_subject m=0}</a>
+				<a href="{$weburl}">
+					<!-- <img src="{$weburl}static/images/logo.png" alt="" border="0"> -->
+					Biomedical Interactive Graphics Lab.
+				</a>
 			</div>
 			<div id="logo-uofs">
 				<a href="http://usask.ca"><img src="{$weburl}static/images/uofs-logo.png" width="261" height="61" alt="University of Saskatchewan" border="0"></a>

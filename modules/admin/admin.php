@@ -15,13 +15,14 @@ if (!$g['user']['is_authenticated'])
 
 // This page is only loaded for authorized users
 if (!$g['user']['is_admin']) {
-	$g['error']->push('This account has no administration privilage', 'error', true);
+	$g['error']->push('This account has no administration privilage'
+		, 'error', true);
 	system::redirect(system::genlink(''));
 }
 
 if(!isset($_GET['content'])) $_GET['content'] = 'people';
 $ct = strtolower($_GET['content']);
-$g['template'] = $ct . '_admin_create';
+$g['template'] = "{$ct}/admin_create";
 $err = false;
 
 // Set main menu options
@@ -29,13 +30,17 @@ $menu = array(
 	array('name' => 'people',       'url' => 'admin/people',       ),
 	array('name' => 'research',     'url' => 'admin/research',     ),
 	array('name' => 'publication',  'url' => 'admin/publication',  ),
+	array('name' => 'opportunity',  'url' => 'admin/opportunity',  ),
+	array('name' => 'resource',     'url' => 'admin/resource',     ),
 );
 $g['smarty']->assign('menu', $menu);
 
 // Set secondary menu options
 $menu = array(
-	array('name' => 'trac',       'url' => 'https://papyrus.usask.ca/trac/hci/',  ),
-	array('name' => 'logout',     'url' => 'logout', 'user_id' => $g['user']['id'],     ),
+	array('name' => 'trac',       'url' =>
+		'https://papyrus.usask.ca/trac/hci/',),
+	array('name' => 'logout',     'url' =>
+		'logout', 'user_id' => $g['user']['id'],),
 );
 $g['smarty']->assign('menu_2', $menu);
 
@@ -52,7 +57,7 @@ function checkparams ($params) {
 
 	foreach ($params as $k => $v) {
 		if (!isset($_GET[$k]) || $_GET[$k] !== $v)
-			return false;;
+			return false;
 	}
 
 	return true;
@@ -111,24 +116,29 @@ function validate ($type, &$v) {
 
 //-----------------------------------------------------------------------------
 
-function make_thumb($src, $dest, $desired_width) {
+function make_thumb($src, $dest, $desired_width, $ext) {
+	if ($ext != 'jpg' && $ext != 'jpeg' && $ext != 'png')
+		return;
 
-	/* read the source image */
-	$source_image = imagecreatefromjpeg($src);
+	$source_image = $ext == 'jpg' || $ext == 'jpeg'
+		? imagecreatefromjpeg($src)
+		: imagecreatefrompng($src);
+
 	$width = imagesx($source_image);
 	$height = imagesy($source_image);
-
-	/* find the "desired height" of this thumbnail, relative to the desired width  */
 	$desired_height = floor($height * ($desired_width / $width));
 
-	/* create a new, "virtual" image */
 	$virtual_image = imagecreatetruecolor($desired_width, $desired_height);
+	imagealphablending($virtual_image, false);
+	imagesavealpha($virtual_image, true);
 
-	/* copy source image at a resized size */
-	imagecopyresampled($virtual_image, $source_image, 0, 0, 0, 0, $desired_width, $desired_height, $width, $height);
+	imagecopyresampled($virtual_image, $source_image, 0, 0, 0, 0,
+		$desired_width, $desired_height, $width, $height);
 
-	/* create the physical thumbnail image to its destination */
-	imagejpeg($virtual_image, $dest);
+	if ($ext == 'jpg' || $ext == 'jpeg')
+		imagejpeg($virtual_image, $dest);
+	else
+		imagepng($virtual_image, $dest, 9);
 }
 
 //-----------------------------------------------------------------------------
@@ -137,15 +147,18 @@ function remove_file($ct, $id, $type) {
 	global $g;
 	$db = $g['db'];
 	$r = $db->query(
-		"SELECT t.{$type}_id, t.{$type}_filename FROM !!!$type AS t WHERE t.{$type}_id IN
-		(SELECT {$type}_id FROM !!!{$type}_$ct AS _ct WHERE _ct.{$ct}_id = $id)"
+		"SELECT t.{$type}_id, t.{$type}_filename
+			FROM !!!$type AS t WHERE t.{$type}_id IN
+			(SELECT {$type}_id FROM !!!{$type}_$ct AS _ct
+				WHERE _ct.{$ct}_id = $id)"
 	);
 	if (!$r['error'] && $r['count'] > 0) {
 		$resrc = $g['content'][$type];
 		foreach ($r['rows'] as $v) {
 			if (file_exists("files/$ct/$type/" . $v["{$type}_filename"]))
 				unlink("files/$ct/$type/" . $v["{$type}_filename"]);
-			if ('image' == $type && file_exists("files/$ct/$type/thumb/" . $v["{$type}_filename"]))
+			if ('image' == $type && file_exists("files/$ct/$type/thumb/"
+				. $v["{$type}_filename"]))
 				unlink("files/$ct/$type/thumb/" . $v["{$type}_filename"]);
 			$resrc->get($v["{$type}_id"]);
 			$resrc->delete();
@@ -161,7 +174,9 @@ function save_file ($ct, $ct_id, $file, $type) {
 
 	global $g;
 	$db_type = $g['content'][$type];
-	$ext = end(explode('.', $file['name']));
+	$fn = explode('.', $file['name']);
+	$ext = array_pop($fn);
+	$filename = array_pop($fn);
 
 	if (in_array($file["type"], $db_type->mime) &&
 		in_array($ext, $db_type->ext) &&
@@ -180,19 +195,24 @@ function save_file ($ct, $ct_id, $file, $type) {
 			if (!file_exists("files/$ct/$type"))
 				mkdir("files/$ct/$type");
 
-			move_uploaded_file($file["tmp_name"], "files/$ct/$type/$id.$ext");
+			$fname = $id . '-' . $filename . '.' . $ext;
+			move_uploaded_file($file["tmp_name"], "files/$ct/$type/$fname");
 
-			$g['db']->query("UPDATE !!!$type SET {$type}_filename = '$id.$ext' WHERE {$type}_id = $id");
-			$g['db']->query("INSERT INTO !!!{$type}_$ct ({$type}_id , {$ct}_id) VALUES ($id,  $ct_id)");
+			$g['db']->query("UPDATE !!!$type SET {$type}_filename ='$fname'
+				WHERE {$type}_id = $id");
+			$g['db']->query("INSERT INTO !!!{$type}_$ct ({$type}_id , {$ct}_id)
+				VALUES ($id,  $ct_id)");
 
 			if ($type == 'image') {
 				if (!file_exists("files/$ct/$type/thumb"))
 					mkdir("files/$ct/$type/thumb");
-				make_thumb("files/$ct/$type/$id.$ext", "files/$ct/$type/thumb/$id.$ext", 40);
+				make_thumb("files/$ct/$type/$fname"
+					, "files/$ct/$type/thumb/$fname", 213, $ext);
 			}
 		}
 	} else {
-		$g['error']->push("{$file['name']} is not of supported types or exceeds max allowed size", 'error');
+		$g['error']->push("{$file['name']} is not of supported types or"
+			. " exceeds max allowed size", 'error');
 	}
 }
 
@@ -238,7 +258,8 @@ else if (checkparams(array(
 			if (validate($content->field_type[$k], $v))
 				$content->$k = $v;
 			else
-				$g['error']->push("worng format($k ". $content->field_type[$k] . ") at $v");
+				$g['error']->push("worng format($k ". $content->field_type[$k]
+					. ") at $v");
 		}
 	}
 	$id = $content->insert();
@@ -260,12 +281,12 @@ else if (checkparams(array(
 	$r = $content->view('default', "$ct.{$ct}_id = $id");
 	if (!$r['error'] && $r['count'] > 0) {
 		$g['smarty']->assign($ct, $r['rows'][0]);
-		$g['template'] = $ct . '_admin_edit';
+		$g['template'] = "{$ct}/admin_edit";
 	} else {
 		$g['error']->push("No $ct found with id " . $id, 'error');
 	}
 
-	$g['template'] = $ct . '_admin_edit';
+	$g['template'] = "{$ct}/admin_edit";
 }
 
 //-----------------------------------------------------------------------------
@@ -281,7 +302,7 @@ else if (checkparams(array(
 		$g['error']->push("No $ct found with id " . $id, 'error');
 	}
 
-	$g['template'] = $ct . '_admin_create';
+	$g['template'] = "{$ct}/admin_create";
 }
 
 //-----------------------------------------------------------------------------
@@ -296,7 +317,8 @@ else if (checkparams(array(
 				if (validate($content->field_type[$k], $v))
 					$content->$k = $v;
 				else
-					$g['error']->push("worng format($k ". $content->field_type[$k] . ") at $v");
+					$g['error']->push("worng format($k "
+						. $content->field_type[$k] . ") at $v");
 			}
 		}
 
@@ -311,12 +333,14 @@ else if (checkparams(array(
 		//	ob_start();
 		//	var_dump($r);
 		//	$r = ob_get_clean();
-		//	$g['error']->push("An error occured while trying to update database $r");
+		//	$g['error']->push("An error occured while trying"
+		//  	. " to update database $r");
 		//} else
 		{
 			$res = $content->update();
 			if (false === $res)
-				$g['error']->push("An error occured while trying to update a $ct.", 'error');
+				$g['error']->push("An error occured while trying to"
+					. " update a $ct.", 'error');
 			else
 				$g['error']->push("$ct updated successfully.");
 		}
@@ -340,7 +364,7 @@ else if (checkparams(array(
 		$r = $g['content'][$ct]->view('default', "$ct.{$ct}_id = $id");
 		if (!$r['error'] && $r['count'] > 0) {
 			$g['smarty']->assign($ct, $r['rows'][0]);
-			$g['template'] = $ct . '_admin_edit';
+			$g['template'] = "{$ct}/admin_edit";
 		} else {
 			$g['error']->push("No $ct found with id " . $id, 'error');
 		}
@@ -358,7 +382,7 @@ else if (checkparams(array(
 	$r = $g['content'][$ct]->view('default', "$ct.{$ct}_id = $id");
 	if (!$r['error'] && $r['count'] > 0) {
 		$g['smarty']->assign($ct, $r['rows'][0]);
-		$g['template'] = $ct . '_admin_edit';
+		$g['template'] = "{$ct}/admin_edit";
 	} else {
 		$g['error']->push("No $ct found with id " . $_GET['id'], 'error');
 	}

@@ -25,7 +25,8 @@ if(isset($_POST['params']))
 
 $res = array(
 	'status' => 'success', // success, error
-	'message' => ''
+	'message' => '',
+	'query' => ''
 );
 
 //-----------------------------------------------------------------------------
@@ -61,10 +62,10 @@ if ('get' == $op && $params) {
 
 	if (isset($params->list) && $params->list) {
 		$g['smarty']->assign($ct, $r);
-		$res['html'] = $g['smarty']->fetch("templates/snippets/{$ct}_{$params->display}_list.tpl");
+		$res['html'] = $g['smarty']->fetch("templates/{$ct}/{$params->display}_list.tpl");
 	} else if ($res['count'] > 0) {
 		$g['smarty']->assign($ct, $r['rows'][0]);
-		$res['html'] = $g['smarty']->fetch("templates/snippets/{$ct}_{$params->display}.tpl");
+		$res['html'] = $g['smarty']->fetch("templates/{$ct}/display_{$params->display}.tpl");
 	}
 
 }
@@ -73,10 +74,49 @@ if ('get' == $op && $params) {
 
 else if ('add-reference'  == $op && $params) {
 	$db = $g['db'];
-	$q = "INSERT INTO !!!{$params->referer_type}_{$params->referred_type}
-		({$params->referer_type}_id, {$params->referred_type}_id )
-		VALUES ({$params->referer_id},  {$params->referred_id})";
+	$referer_order = 0;
+	$referred_order = 0;
+
+	$q = <<<SQL
+		SELECT MAX({$params->referred_type}_order) as max_{$params->referred_type}_order
+		FROM !!!{$params->referer_type}_{$params->referred_type}
+		WHERE {$params->referer_type}_id ={$params->referer_id}
+SQL;
+
 	$r = $db->query($q);
+
+	if ($r['count'] > 0) {
+		$referred_order = $r['rows'][0]["max_{$params->referred_type}_order"];
+		$referred_order = is_null($referred_order) ? 0 : $referred_order + 1;
+	}
+
+	$q = <<<SQL
+		SELECT MAX({$params->referer_type}_order) as max_{$params->referer_type}_order
+		FROM !!!{$params->referer_type}_{$params->referred_type}
+		WHERE {$params->referred_type}_id ={$params->referred_id}
+SQL;
+
+	$r = $db->query($q);
+
+	if ($r['count'] > 0) {
+		$referer_order = $r['rows'][0]["max_{$params->referer_type}_order"];
+		$referer_order = is_null($referer_order) ? 0 : $referer_order + 1;
+	}
+
+	$q = <<<SQL
+		INSERT INTO !!!{$params->referer_type}_{$params->referred_type}
+		({$params->referer_type}_id, {$params->referred_type}_id
+		 , {$params->referer_type}_order, {$params->referred_type}_order)
+		VALUES (
+			{$params->referer_id},
+			{$params->referred_id},
+			{$referer_order},
+			{$referred_order})
+SQL;
+
+
+	$r = $db->query($q);
+
 	if ($r['error']) {
 		// made no change to references
 		$res['status'] = 'error';

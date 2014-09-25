@@ -41,7 +41,7 @@ class db {
     function query($q) {
         global $g;
 
-        $q = str_replace('!!!', 'mycms_', $q);
+        $q = str_replace('!!!', $this->name . '_', $q);
         $r = array('error' => false, 'rows' => array(), 'count' => 0, 'message' => '');
 
         if ($g['DB_DataObject']['debug'] >  0) {
@@ -77,7 +77,7 @@ class db {
             return $ret;
         }
 
-		$q = str_replace('!!!', 'mycms_', $q);
+		$q = str_replace('!!!', $this->name . '_', $q);
 
         $params = system::check_params($params);
 

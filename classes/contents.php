@@ -14,7 +14,6 @@ class image extends content {
 	public $mime	 = array("image/gif", "image/jpeg", "image/jpg", "image/png");
 	public $max_size = 1048576; // 1 * 1024 * 1024;
 
-	public $__table = 'mycms_image';	// table name
 	public $image_id;					// int(11)  not_null primary_key unique_key auto_increment
 	public $image_filename;				// string(250)  not_null
 
@@ -39,7 +38,6 @@ class video extends content {
     public $mime     = array("video/mp4", "video/webm", "video/ogg");
     public $max_size = 10485760; // 10 * 1024 * 1024;
 
-	public $__table = 'mycms_video';	// table name
 	public $video_id;					// int(11)  not_null primary_key unique_key auto_increment
 	public $video_filename;				// string(250)  not_null
 
@@ -62,9 +60,8 @@ class doc extends content {
 
     public $ext      = array("pdf");
     public $mime     = array("application/pdf");
-    public $max_size = 1048576; // 1 * 1024 * 1024;
+    public $max_size = 10485760; // 10 * 1024 * 1024;
 
-	public $__table = 'mycms_doc';		   // table name
 	public $doc_id;						  // int(11)  not_null primary_key unique_key auto_increment
 	public $doc_filename;					// string(250)  not_null
 
@@ -97,7 +94,6 @@ date:string_format
 
 class people extends content {
 
-	public $__table = 'mycms_people';	// table name
 	public $people_id;					// int(11)  not_null primary_key unique_key auto_increment
 	public $people_firstname;			// string(50)  not_null
 	public $people_middlename;			// string(50)
@@ -153,7 +149,6 @@ $g['content']['people'] = new people();
 
 class research extends content {
 
-	public $__table = 'mycms_research';	 // table name
 	public $research_id;				 // int(11)  not_null primary_key unique_key auto_increment
 	public $research_title;				 // string(150)  not_null
 	public $research_summary;			 // string(300)
@@ -183,6 +178,8 @@ class research extends content {
 			'video'	      => 'all',
 			'people'	  => 'all',
 			'publication' => 'all'),
+		'largeicon' => array(
+			'image' => 'max'),
 		'teaser' => array(
 			'image' => 'max'),
 		'tiny' => array(
@@ -202,7 +199,6 @@ $g['content']['research'] = new research();
 
 class publication extends content {
 
-	public $__table = 'mycms_publication';	   // table name
     public $publication_id;                    // int(11)  not_null primary_key unique_key auto_increment
     public $publication_type;                  // string(13)  not_null enum
     public $publication_title;                 // string(300)  not_null
@@ -275,6 +271,8 @@ class publication extends content {
 			'doc'	   => 'all',
 			'research' => 'all',
 			'people'   => 'all'),
+		'largeicon' => array(
+			'image'    => 'max'),
 		'teaser' => array(
 			'doc'    => 'max',
 			'video'  => 'max',
@@ -313,6 +311,68 @@ class download extends content {
 	}
 }
 $g['content']['download'] = new download();
+
+//=============================================================================
+
+class opportunity extends content {
+
+    public $opportunity_id;                    // int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    public $opportunity_title;                 // varchar(150) COLLATE utf8_unicode_ci NOT NULL,
+    public $opportunity_summary;               // varchar(1000) COLLATE utf8_unicode_ci DEFAULT NULL,
+    public $opportunity_description;           // varchar(10000) COLLATE utf8_unicode_ci DEFAULT NULL,
+    public $opportunity_status;                // enum('active','future','onhold','past','unknown') COLLATE utf8_unicode_ci NOT NULL,
+    public $opportunity_priority;              // int(10) DEFAULT NULL,
+
+    public $field_type = array(
+        'opportunity_title'       => 'string',
+        'opportunity_summary'     => 'string',
+        'opportunity_description' => 'string',
+        'opportunity_status'      => 'enum:active,future,onhold,past,unknown',
+        'opportunity_priority'    => 'int',
+    );
+
+	public $displays = array(
+		'default' => array(),
+		'teaser'  => array()
+	);
+
+    public $title_format = 'opportunity_title';
+
+	public function __construct() {
+		parent::__construct('opportunity');
+	}
+}
+$g['content']['opportunity'] = new opportunity();
+
+//=============================================================================
+
+class resource extends content {
+
+    public $resource_id;                   // int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    public $resource_title;                // varchar(150) COLLATE utf8_unicode_ci NOT NULL,
+    public $resource_summary;              // varchar(1000) COLLATE utf8_unicode_ci DEFAULT NULL,
+    public $resource_description;          // varchar(10000) COLLATE utf8_unicode_ci DEFAULT NULL,
+    public $resource_priority;             // int(10) DEFAULT NULL,
+
+    public $field_type = array(
+        'resource_title'       => 'string',
+        'resource_summary'     => 'string',
+        'resource_description' => 'string',
+        'resource_priority'    => 'int',
+    );
+
+	public $displays = array(
+		'default' => array(),
+		'teaser'  => array()
+	);
+
+    public $title_format = 'resource_title';
+
+	public function __construct() {
+		parent::__construct('resource');
+	}
+}
+$g['content']['resource'] = new resource();
 
 //=============================================================================
 
