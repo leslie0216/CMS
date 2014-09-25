@@ -18,10 +18,10 @@ abstract class content extends \DB_DataObject {
 
 	public function __construct($type) {
 		global $g;
-		$dbn = $g['DB_DataObject']['db_name'];
+		$prefix = $g['DB_DataObject']['table_prefix'];
 
 		$this->m_type = $type;
-		$this->__table = $dbn . '_' . array_pop(explode('\\', get_class($this)));
+		$this->__table = $prefix . '_' . array_pop(explode('\\', get_class($this)));
 	}
 
 //-----------------------------------------------------------------------------

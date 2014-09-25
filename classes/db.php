@@ -19,11 +19,6 @@ class db {
 
     function __construct() {
         global $g;
-        //mysql_connect($g['db_host'],$g['db_user'],$g['db_pass'],null);//,MYSQL_CLIENT_SSL);
-        //mysql_select_db($g['db_name']);
-        //mysql_query('SET NAMES "utf8"');
-        //mysql_query("SET time_zone = '{$g['timezone']}'");
-
         // setting database connections
         $db_opts    =& \PEAR::getStaticProperty('DB_DataObject','options');
         $db_opts    = $g['DB_DataObject'];

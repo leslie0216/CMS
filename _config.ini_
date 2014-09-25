@@ -13,6 +13,7 @@ trac_url         = https://papyrus.usask.ca/trac/hci/
 
 [DB_DataObject]
 database          = mysql://root:pass@localhost/mycms
+table_prefix      = mycms
 schema_location   = schema
 class_location    = schema
 require_prefix    = schema
