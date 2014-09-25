@@ -13,6 +13,7 @@ class db {
 //-----------------------------------------------------------------------------
 
     public $name;
+    public $table_prefix;
     public $_db;
 
 //-----------------------------------------------------------------------------
@@ -23,6 +24,7 @@ class db {
         $db_opts    =& \PEAR::getStaticProperty('DB_DataObject','options');
         $db_opts    = $g['DB_DataObject'];
         $this->name = substr($g['DB_DataObject']['database'], strrpos($g['DB_DataObject']['database'], '/') + 1);
+        $this->table_prefix = $g['DB_DataObject']['table_prefix'];
         $this->_db  =& \DB::Connect( $g['DB_DataObject']['database'], array() );
         if (\PEAR::isError($this->_db)) {
             die($this->_db->getMessage());
@@ -36,7 +38,7 @@ class db {
     function query($q) {
         global $g;
 
-        $q = str_replace('!!!', $this->name . '_', $q);
+        $q = str_replace('!!!', $this->table_prefix . '_', $q);
         $r = array('error' => false, 'rows' => array(), 'count' => 0, 'message' => '');
 
         if ($g['DB_DataObject']['debug'] >  0) {
