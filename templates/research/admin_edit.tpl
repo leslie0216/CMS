@@ -29,8 +29,8 @@
 			action='{gl url="admin/research/edit"}/{$research.research_id}'
 	>
 
-		<a class="view" href='{gl url="research"}/{$research.research_id}'>view</a>
-		<a class="remove" href='{gl url="admin/research/remove"}/{$research.research_id}'>remove</a>
+		<a class="view button" href='{gl url="research"}/{$research.research_id}'>View</a>
+		<a class="remove button" href='{gl url="admin/research/remove"}/{$research.research_id}'>Remove</a>
 
 		<div id="research_title-container" class="field f_100">
 			<label for="research_title">

@@ -29,8 +29,8 @@
 			action='{gl url="admin/opportunity/edit"}/{$opportunity.opportunity_id}'
 	>
 
-		<a class="view" href='{gl url="opportunity"}/{$opportunity.opportunity_id}'>view</a>
-		<a class="remove" href='{gl url="admin/opportunity/remove"}/{$opportunity.opportunity_id}'>remove</a>
+		<a class="view button" href='{gl url="opportunity"}/{$opportunity.opportunity_id}'>View</a>
+		<a class="remove button" href='{gl url="admin/opportunity/remove"}/{$opportunity.opportunity_id}'>Remove</a>
 
 		<div id="opportunity_title-container" class="field f_100">
 			<label for="opportunity_title">

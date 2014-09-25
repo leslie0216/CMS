@@ -29,8 +29,8 @@
 		action='{gl url="admin/publication/edit"}/{$publication.publication_id}'
 	>
 
-		<a class="view" href='{gl url="publication"}/{$publication.publication_id}'>view</a>
-		<a class="remove" href='{gl url="admin/publication/remove"}/{$publication.publication_id}'>remove</a>
+		<a class="view button" href='{gl url="publication"}/{$publication.publication_id}'>View</a>
+		<a class="remove button" href='{gl url="admin/publication/remove"}/{$publication.publication_id}'>Remove</a>
 
 		<div id="publication_title-container" class="field f_100">
 			<label for="publication_title">

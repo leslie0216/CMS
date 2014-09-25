@@ -15,12 +15,12 @@ $g['template'] = 'home';
 
 // Set main menu options
 $menu = array(
+	array('name' => 'Home',          'url' => '',              ),
 	array('name' => 'Researches',    'url' => 'researches',    ),
 	array('name' => 'Peoples',       'url' => 'peoples',       ),
 	array('name' => 'Opportunities', 'url' => 'opportunities', ),
 	array('name' => 'Publications',  'url' => 'publications',  ),
 	array('name' => 'Resources',     'url' => 'resources',     ),
-	array('name' => 'Home',          'url' => '',              ),
 );
 
 

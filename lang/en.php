@@ -10,6 +10,7 @@
 @define('L_ALUMNI', 'Alumni');
 @define('L_ARTICLE', 'Article');
 @define('L_AUTHENTICATED', 'Authenticated');
+@define('L_BACK_TO_PROFILE', 'Back to Profile');
 @define('L_BOOK', 'Book');
 @define('L_BOOKLET', 'Booklet');
 @define('L_CITATION', 'Citation');
@@ -21,6 +22,7 @@
 @define('L_CURRENT_RESEARCH', 'Current Research');
 @define('L_DOCUMENTS', 'Documents');
 @define('L_DOWNLOADS', 'Downloads');
+@define('L_EDIT', 'Edit');
 @define('L_EDIT_PEOPLE', 'Edit people');
 @define('L_EDIT_PUBLICATION', 'Edit publication');
 @define('L_EDIT_RESEARCH', 'Edit research');

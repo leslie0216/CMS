@@ -71,7 +71,7 @@
 			<div id="logo">
 				<a href="{$weburl}">
 					<!-- <img src="{$weburl}static/images/logo.png" alt="" border="0"> -->
-					Biomedical Interactive Graphics Lab.
+					biomedical interactive graphics lab.
 				</a>
 			</div>
 			<div id="logo-uofs">

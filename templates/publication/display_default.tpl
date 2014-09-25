@@ -4,7 +4,7 @@
 {if isset($publication)}
 <div class="publication-default display-default" data-type='publication' data-id={$publication.publication_id}>
 	{if isset($user) and $user.is_admin}
-		<a class="edit-node" href='{gl url="admin/publication/view"}/{$publication.publication_id}'>edit</a>
+		<a class="edit-node button" href='{gl url="admin/publication/view"}/{$publication.publication_id}'>Edit</a>
 	{/if}
 
 	<h2>

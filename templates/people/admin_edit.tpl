@@ -28,8 +28,8 @@
 	<form class="TTWForm" method="post" enctype="multipart/form-data" novalidate
 			action='{gl url="admin/people/edit"}/{$people.people_id}'>
 
-		<a class="view" href='{gl url="people"}/{$people.people_id}'>view</a>
-		<a class="remove" href='{gl url="admin/people/remove"}/{$people.people_id}'>remove</a>
+		<a class="view button" href='{gl url="people"}/{$people.people_id}'>View</a>
+		<a class="remove button" href='{gl url="admin/people/remove"}/{$people.people_id}'>Remove</a>
 
 		<div id="people_firstname-container" class="field f_100">
 			<label for="people_firstname">

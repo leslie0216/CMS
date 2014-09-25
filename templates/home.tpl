@@ -10,7 +10,7 @@
 {/for}
 </div>
 
-<a class="view-all" href="{gl url='researches'}">{t s='View All' m=0}<span class="arrows">&nbsp;&gt;&gt;</span></a>
+<a class="view-all button" href="{gl url='researches'}">{t s='View All' m=0}</a>
 
 {*---------------------------------------------------------------------------*}
 
@@ -22,7 +22,7 @@
 {/for}
 </div>
 
-<a class="view-all" href="{gl url='publications'}">{t s='View All' m=0}<span class="arrows">&nbsp;&gt;&gt;</span></a>
+<a class="view-all button" href="{gl url='publications'}">{t s='View All' m=0}</a>
 
 {*---------------------------------------------------------------------------*}
 

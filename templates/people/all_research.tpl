@@ -14,11 +14,12 @@
 	</div>
 
 	<div class="profileright">
-		<a href="{$weburl}people/{$people.people_id}">&lt;&lt; Back to Profile</a>
+		<a class="button" href="{$weburl}people/{$people.people_id}">{t s='Back to Profile' m=0}</a>
 		{if isset($people.research) and $people.research.count > 0}
 			{include "templates/research/teaser_list.tpl" research=$people.research}
 		{/if}
 	</div>
+	<br clear="all" />
 {/if}
 </div>
 
