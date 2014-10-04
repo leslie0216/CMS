@@ -2,7 +2,7 @@
 {*---------------------------------------------------------------------------*}
 
 
-{include "templates/snippets/section_title.tpl" title={t s='Researches' m=0}}
+{include "templates/snippets/section_title.tpl" title={t s='Research' m=0}}
 
 <div class="research-largeicon-list largeicon-list">
 {for $i=0; $i < $research.count; $i++}
@@ -10,7 +10,7 @@
 {/for}
 </div>
 
-<a class="view-all button" href="{gl url='researches'}">{t s='View All' m=0}</a>
+<a class="view-all button" href="{gl url='research'}">{t s='View All' m=0}</a>
 
 {*---------------------------------------------------------------------------*}
 

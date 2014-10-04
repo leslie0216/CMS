@@ -1,9 +1,9 @@
 
 {*---------------------------------------------------------------------------*}
 
-<h2>{t s='Researches' m=0}</h2>
-{if isset($researches)}
-	{include "templates/research/largeicon_list.tpl" research=$researches}
+<h2>{t s='Research' m=0}</h2>
+{if isset($research)}
+	{include "templates/research/largeicon_list.tpl" research=$research}
 {/if}
 
 

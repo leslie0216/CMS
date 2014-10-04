@@ -16,8 +16,8 @@ $g['template'] = 'home';
 // Set main menu options
 $menu = array(
 	array('name' => 'Home',          'url' => '',              ),
-	array('name' => 'Researches',    'url' => 'researches',    ),
-	array('name' => 'Peoples',       'url' => 'peoples',       ),
+	array('name' => 'Research',    'url' => 'research',    ),
+	array('name' => 'People',       'url' => 'people',       ),
 	array('name' => 'Opportunities', 'url' => 'opportunities', ),
 	array('name' => 'Publications',  'url' => 'publications',  ),
 	array('name' => 'Resources',     'url' => 'resources',     ),
@@ -77,8 +77,7 @@ case 'home': {
 
 //-----------------------------------------------------------------------------
 
-case 'people':
-case 'peoples': {
+case 'people': {
 	if (isset($_GET['id']) && isset($_GET['details'])) {
 
 		$id = $_GET['id'];
@@ -143,7 +142,7 @@ case 'peoples': {
 		if (!$ppl['error'] && $ppl['count'] > 0)
 			$g['smarty']->assign('people', $ppl);
 
-		$g['template'] = 'peoples';
+		$g['template'] = 'people';
 	}
 } break;
 
@@ -151,7 +150,7 @@ case 'peoples': {
 
 case 'pages':
 case 'courses':
-case 'researches':
+case 'research':
 case 'publications':
 case 'opportunities':
 case 'resources':
@@ -166,7 +165,7 @@ case 'resources':
 		$ct = 'course';
 		$priority = "$ct.{$ct}_priority DESC";
 		break;
-	case 'researches':
+	case 'research':
 		$ct = 'research';
 		$priority = "$ct.{$ct}_priority DESC";
 		$display = 'largeicon';

@@ -55,7 +55,6 @@
 @define('L_PAST', 'Past');
 @define('L_PAST_PROJECTS', 'Past Projects');
 @define('L_PEOPLE', 'People');
-@define('L_PEOPLES', 'Peoples');
 @define('L_PHDTHESIS', 'PHD Thesis');
 @define('L_PROCEEDINGS', 'Proceedings');
 @define('L_PUBLICATION', 'Publication');
@@ -66,7 +65,6 @@
 @define('L_RECENT_VISITOR', 'Recent Visitor');
 @define('L_RESEARCH', 'Research');
 @define('L_RESEARCHER', 'Researcher');
-@define('L_RESEARCHES', 'Researches');
 @define('L_RESOURCE', 'Resource');
 @define('L_RESOURCES', 'Resources');
 @define('L_SEARCH', 'Search');
